@@ -50,7 +50,9 @@ CREATE TABLE IF NOT EXISTS orders (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+
 -- Order items
+
 CREATE TABLE IF NOT EXISTS order_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT NOT NULL,
@@ -70,7 +72,6 @@ CREATE TABLE IF NOT EXISTS contact_messages (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_read TINYINT(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB;
-
 -- Sample products
 INSERT INTO products (name, description, price, image, stock, category, featured) VALUES
 ('Handwoven Basket', 'A sturdy handwoven basket made from natural fibers, perfect for storage or decor.', 24.99, 'images/products/basket.jpg', 15, 'Home Decor', 1),
