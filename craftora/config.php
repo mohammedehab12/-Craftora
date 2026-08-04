@@ -1,51 +1,51 @@
 <?php
-/**
- * config.php
- * Database connection and core app configuration for Craftora.
- */
+// Database Configuration
+define('DB_HOST', 'localhost');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+define('DB_NAME', 'Craftora');
 
-// ---- Error reporting (disable display_errors in production) ----
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// Site Configuration
+define('SITE_NAME', 'Craftora');
+define('SITE_URL', 'http://localhost/project/Craftora/');
 
-// ---- Session ----
-if (session_status() === PHP_SESSION_NONE) {
+// Start session
+if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// ---- Database configuration ----
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'craftora');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_CHARSET', 'utf8mb4');
-
-// ---- PDO connection ----
-$dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET;
-
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
-
+// Database Connection
 try {
-    $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
-} catch (PDOException $e) {
-    // Never leak raw DB errors to end users
-    die('Database connection failed. Please try again later.');
+    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $conn->set_charset("utf8mb4");
+} catch (Exception $e) {
+    die("Database connection error: " . $e->getMessage());
 }
 
-// ---- Base URL / path helpers (adjust if the project moves out of root) ----
-define('BASE_URL', '/craftora/');
-
-// ---- Simple auth helper ----
-function isLoggedIn(): bool
-{
+// Helper Functions
+function isLoggedIn() {
     return isset($_SESSION['user_id']);
 }
 
-function currentUserId()
-{
+function getUserId() {
     return $_SESSION['user_id'] ?? null;
 }
+
+function redirect($url) {
+    header("Location: $url");
+    exit();
+}
+
+function sanitize($data) {
+    return trim($data);
+}
+
+function formatPrice($price) {
+    return number_format($price, 2) . ' EGP';
+}
+?>
