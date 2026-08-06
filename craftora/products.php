@@ -1,99 +1,125 @@
 <?php
-require_once __DIR__ . '/config.php';
+require_once 'config.php';
 
-$category = trim($_GET['category'] ?? '');
-$search   = trim($_GET['search'] ?? '');
+// Get all products with optional category filter
+$category = isset($_GET['category']) ? sanitize($_GET['category']) : '';
+$search = isset($_GET['search']) ? sanitize($_GET['search']) : '';
 
-$sql    = 'SELECT * FROM products WHERE 1=1';
+$query = "SELECT * FROM products WHERE 1=1";
+$types = '';
 $params = [];
 
 if ($category !== '') {
-    $sql .= ' AND category = :category';
-    $params['category'] = $category;
+    $query .= " AND category = ?";
+    $types .= 's';
+    $params[] = $category;
 }
+
 if ($search !== '') {
-    $sql .= ' AND name LIKE :search';
-    $params['search'] = '%' . $search . '%';
+    $query .= " AND (name LIKE CONCAT('%', ?, '%') OR description LIKE CONCAT('%', ?, '%'))";
+    $types .= 'ss';
+    $params[] = $search;
+    $params[] = $search;
 }
-$sql .= ' ORDER BY created_at DESC';
 
-$stmt = $pdo->prepare($sql);
-$stmt->execute($params);
-$products = $stmt->fetchAll();
+$query .= " ORDER BY created_at DESC";
 
-$catStmt = $pdo->query('SELECT DISTINCT category FROM products WHERE category IS NOT NULL ORDER BY category');
-$categories = $catStmt->fetchAll(PDO::FETCH_COLUMN);
+$stmt = $conn->prepare($query);
+if ($types !== '') {
+    $stmt->bind_param($types, ...$params);
+}
+$stmt->execute();
+$products_result = $stmt->get_result();
 
-$pageTitle  = 'Products - Craftora';
-$activePage = 'products';
-include __DIR__ . '/includes/header.php';
+// Get categories
+$categories_query = "SELECT DISTINCT category FROM products ORDER BY category";
+$categories_result = $conn->query($categories_query);
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Craftora</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <?php include 'includes/header.php'; ?>
 
-<section class="py-5">
-    <div class="container">
-        <h1 class="section-title">Our Products</h1>
-
-        <form method="GET" action="products.php" class="row g-2 justify-content-center mb-5">
-            <div class="col-md-4">
-                <input type="text" name="search" class="form-control" placeholder="Search products..."
-                       value="<?php echo htmlspecialchars($search); ?>">
+    <div class="container my-5">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <h1 class="display-4 fw-bold mb-3">Our Handmade Products</h1>
+                <p class="lead text-muted">Unique crafts made by skilled local artisans</p>
             </div>
-            <div class="col-md-3">
-                <select name="category" class="form-select" onchange="this.form.submit()">
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <form action="" method="GET" class="d-flex">
+                    <input type="text" name="search" class="form-control me-2" placeholder="Search products..." value="<?php echo htmlspecialchars($search); ?>">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <select class="form-select" onchange="window.location.href='products.php?category='+encodeURIComponent(this.value)">
                     <option value="">All Categories</option>
-                    <?php foreach ($categories as $cat): ?>
-                        <option value="<?php echo htmlspecialchars($cat); ?>" <?php echo $category === $cat ? 'selected' : ''; ?>>
-                            <?php echo htmlspecialchars($cat); ?>
+                    <?php while($cat = $categories_result->fetch_assoc()): ?>
+                        <option value="<?php echo htmlspecialchars($cat['category']); ?>" <?php echo $category === $cat['category'] ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($cat['category']); ?>
                         </option>
-                    <?php endforeach; ?>
+                    <?php endwhile; ?>
                 </select>
             </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-dark w-100">Filter</button>
-            </div>
-        </form>
+        </div>
 
-        <?php if (empty($products)): ?>
-            <div class="empty-state">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <p>No products found. Try a different search or category.</p>
-            </div>
-        <?php else: ?>
-            <div class="row g-4">
-                <?php foreach ($products as $product): ?>
-                    <div class="col-6 col-md-4 col-lg-3">
-                        <div class="product-card position-relative">
-                            <?php if ($product['featured']): ?>
-                                <span class="badge badge-featured position-absolute m-2">Featured</span>
-                            <?php endif; ?>
-                            <img src="<?php echo htmlspecialchars($product['image'] ?: 'images/placeholder.jpg'); ?>"
-                                 alt="<?php echo htmlspecialchars($product['name']); ?>" class="product-img">
-                            <div class="product-body">
-                                <div class="product-category"><?php echo htmlspecialchars($product['category'] ?? ''); ?></div>
-                                <div class="product-name"><?php echo htmlspecialchars($product['name']); ?></div>
-                                <p class="text-muted small mb-2">
-                                    <?php echo htmlspecialchars(mb_strimwidth($product['description'] ?? '', 0, 70, '...')); ?>
-                                </p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="product-price">$<?php echo number_format($product['price'], 2); ?></span>
-                                    <?php if ($product['stock'] < 1): ?>
-                                        <span class="badge bg-secondary">Out of stock</span>
-                                    <?php elseif ($product['stock'] <= 5): ?>
-                                        <span class="badge badge-stock-low">Only <?php echo $product['stock']; ?> left</span>
-                                    <?php endif; ?>
-                                </div>
-                                <button class="btn btn-gradient btn-sm w-100 mt-2 btn-add-to-cart"
-                                        data-product-id="<?php echo $product['id']; ?>"
-                                        <?php echo $product['stock'] < 1 ? 'disabled' : ''; ?>>
-                                    <i class="fa-solid fa-cart-plus"></i> Add to Cart
-                                </button>
-                            </div>
+        <?php if ($products_result->num_rows > 0): ?>
+        <div class="row">
+            <?php while($product = $products_result->fetch_assoc()): ?>
+            <div class="col-md-4 mb-4">
+                <div class="card product-card h-100">
+                    <img src="<?php echo htmlspecialchars($product['image']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($product['name']); ?>" onerror="this.src='images/placeholder.jpg'">
+                    <div class="card-body">
+                        <span class="badge bg-secondary mb-2"><?php echo htmlspecialchars($product['category']); ?></span>
+                        <h5 class="card-title"><?php echo htmlspecialchars($product['name']); ?></h5>
+                        <p class="card-text text-muted"><?php echo htmlspecialchars($product['description']); ?></p>
+
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="h5 mb-0 text-primary"><?php echo formatPrice($product['price']); ?></span>
+                            <small class="text-muted">
+                                <i class="fas fa-box"></i> Stock: <?php echo $product['stock']; ?>
+                            </small>
                         </div>
+
+                        <?php if ($product['stock'] > 0): ?>
+                            <button class="btn btn-primary w-100 add-to-cart" data-id="<?php echo $product['id']; ?>">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        <?php else: ?>
+                            <button class="btn btn-secondary w-100" disabled>
+                                Out of Stock
+                            </button>
+                        <?php endif; ?>
                     </div>
-                <?php endforeach; ?>
+                </div>
             </div>
+            <?php endwhile; ?>
+        </div>
+        <?php else: ?>
+        <div class="alert alert-info text-center">
+            <i class="fas fa-info-circle fa-2x mb-3"></i>
+            <p class="mb-0">No products found. Try a different search or category.</p>
+        </div>
         <?php endif; ?>
     </div>
-</section>
 
-<?php include __DIR__ . '/includes/footer.php'; ?>
+    <?php include 'includes/footer.php'; ?>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
