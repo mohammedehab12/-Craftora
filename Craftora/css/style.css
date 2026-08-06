@@ -1,0 +1,873 @@
+/* =========================================================
+   Craftora — Custom Styles
+   Premium artisan palette: matte black, dark brown, beige,
+   cream and olive green, built for a handmade-goods store.
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+    /* ---- Brand palette (exact brief colors) ---- */
+    --matte-black: #1F1F1F;
+    --matte-black-rgb: 31, 31, 31;
+    --dark-brown: #6F4E37;
+    --dark-brown-rgb: 111, 78, 55;
+    --dark-brown-deep: #563C29;   /* hover/active shade of dark brown */
+    --light-beige: #F5F1EB;
+    --cream: #FFF8F0;
+    --olive: #6B8E23;
+    --olive-rgb: 107, 142, 35;
+    --olive-deep: #56711C;        /* hover/active shade of olive */
+    --white: #FFFFFF;
+
+    /* ---- Semantic aliases ---- */
+    --primary-color: var(--dark-brown);
+    --primary-rgb: var(--dark-brown-rgb);
+    --secondary-color: var(--olive);
+    --secondary-rgb: var(--olive-rgb);
+    --accent-color: var(--olive);
+    --accent-rgb: var(--olive-rgb);
+    --bg-color: var(--light-beige);
+    --card-color: var(--white);
+    --text-color: #2B2420;
+    --text-muted-color: #756A5F;
+    --dark-color: var(--matte-black);
+    --success-color: var(--olive);
+    --danger-color: #A6453A;
+    --warning-color: #B9812E;
+
+    /* ---- Shape & elevation ---- */
+    --radius-sm: 10px;
+    --radius: 14px;
+    --radius-lg: 16px;
+    --shadow-sm: 0 2px 10px rgba(31, 31, 31, 0.06);
+    --shadow-md: 0 10px 26px rgba(31, 31, 31, 0.10);
+    --shadow-lg: 0 18px 40px rgba(31, 31, 31, 0.16);
+
+    /* ---- Type ---- */
+    --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-body: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-body);
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.65;
+}
+
+a {
+    color: var(--dark-brown);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    color: var(--matte-black);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+/* Section / page headings get a small hand-stitched accent rule beneath
+   them — a quiet nod to the craft theme, used consistently site-wide. */
+h1.display-3::after,
+h1.display-4::after,
+h1.display-5::after,
+h2.display-5::after {
+    content: '';
+    display: block;
+    width: 56px;
+    height: 4px;
+    margin-top: 1.1rem;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--olive), var(--dark-brown));
+}
+
+.text-center h1.display-3::after,
+.text-center h1.display-4::after,
+.text-center h1.display-5::after,
+.text-center h2.display-5::after {
+    margin-inline: auto;
+}
+
+.text-primary {
+    color: var(--dark-brown) !important;
+}
+
+.text-muted {
+    color: var(--text-muted-color) !important;
+}
+
+/* Bootstrap color-utility overrides so the whole site shares one palette */
+.bg-primary {
+    background-color: var(--dark-brown) !important;
+}
+
+.bg-secondary {
+    background: linear-gradient(120deg, var(--olive), var(--olive-deep)) !important;
+    color: #fff !important;
+}
+
+.bg-success {
+    background-color: var(--olive) !important;
+}
+
+.bg-danger {
+    background-color: var(--danger-color) !important;
+}
+
+.bg-warning {
+    background-color: var(--warning-color) !important;
+    color: #fff !important;
+}
+
+.bg-info {
+    background-color: #5B6B7C !important;
+}
+
+.bg-light {
+    background-color: var(--cream) !important;
+}
+
+.bg-dark, .bg-dark.footer {
+    background-color: var(--matte-black) !important;
+}
+
+/* A hand-stitched dashed rule used for every <hr> across the site —
+   cart summaries, checkout totals, footer divider — ties the whole
+   project back to the idea of thread and craftsmanship. */
+hr {
+    border: none;
+    height: 1px;
+    background-image: repeating-linear-gradient(
+        90deg,
+        rgba(111, 78, 55, 0.35) 0,
+        rgba(111, 78, 55, 0.35) 6px,
+        transparent 6px,
+        transparent 12px
+    );
+    opacity: 1;
+    margin: 1.25rem 0;
+}
+
+.footer hr, hr.border-secondary {
+    background-image: repeating-linear-gradient(
+        90deg,
+        rgba(245, 241, 235, 0.35) 0,
+        rgba(245, 241, 235, 0.35) 6px,
+        transparent 6px,
+        transparent 12px
+    );
+}
+
+/* =========================
+   Navbar
+   ========================= */
+.navbar {
+    transition: all 0.3s ease;
+    padding-top: 0.9rem;
+    padding-bottom: 0.9rem;
+    background-color: var(--white) !important;
+}
+
+.navbar-brand {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--matte-black) !important;
+    letter-spacing: -0.01em;
+}
+
+.navbar-brand .fa-store,
+.navbar-brand i {
+    color: var(--dark-brown) !important;
+}
+
+.brand-logo {
+    height: 38px;
+    width: auto;
+    max-width: 140px;
+    object-fit: contain;
+}
+
+.nav-link {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--matte-black) !important;
+    transition: color 0.25s ease;
+    position: relative;
+    padding: 0.5rem 0.9rem !important;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0.9rem;
+    right: 0.9rem;
+    bottom: 0.1rem;
+    height: 2px;
+    background: var(--olive);
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+}
+
+.nav-link:hover {
+    color: var(--dark-brown) !important;
+}
+
+.nav-link:hover::after {
+    transform: scaleX(1);
+}
+
+.dropdown-menu {
+    border: none;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-md);
+    padding: 0.5rem;
+}
+
+.dropdown-item {
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    font-weight: 500;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    background-color: var(--light-beige);
+    color: var(--dark-brown);
+}
+
+/* =========================
+   Buttons
+   ========================= */
+.btn {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: 12px;
+    transition: all 0.25s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--dark-brown) 0%, var(--dark-brown-deep) 100%);
+    border-color: var(--dark-brown);
+    color: #fff;
+    padding: 0.7rem 1.7rem;
+    box-shadow: 0 4px 14px rgba(var(--dark-brown-rgb), 0.25);
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background: linear-gradient(135deg, var(--dark-brown-deep) 0%, #452f20 100%);
+    border-color: var(--dark-brown-deep);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(var(--dark-brown-rgb), 0.35);
+    color: #fff;
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-outline-primary {
+    color: var(--dark-brown);
+    border: 2px solid var(--dark-brown);
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 0.6rem 1.6rem;
+    background-color: transparent;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--dark-brown);
+    border-color: var(--dark-brown);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(var(--dark-brown-rgb), 0.3);
+}
+
+.btn-outline-secondary {
+    color: var(--matte-black);
+    border: 2px solid #e2dcd3;
+    background-color: var(--white);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--olive);
+    border-color: var(--olive);
+    color: #fff;
+}
+
+.btn-outline-light:hover {
+    color: var(--dark-brown);
+}
+
+.btn-secondary {
+    background: var(--olive);
+    border-color: var(--olive);
+    color: #fff;
+    border-radius: 12px;
+}
+
+.btn-secondary:hover {
+    background: var(--olive-deep);
+    border-color: var(--olive-deep);
+    color: #fff;
+}
+
+.btn-link.text-danger {
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.btn-lg {
+    padding: 0.85rem 2.1rem;
+    font-size: 1.05rem;
+    border-radius: 14px;
+}
+
+.btn:disabled, .btn.disabled {
+    opacity: 0.55;
+    box-shadow: none;
+}
+
+/* =========================
+   Hero Section
+   ========================= */
+.hero {
+    padding: 120px 0;
+    background: linear-gradient(135deg, var(--cream) 0%, var(--light-beige) 55%, #EFE7DA 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 88% 12%, rgba(var(--olive-rgb), 0.10) 0%, transparent 45%),
+        radial-gradient(circle at 6% 92%, rgba(var(--dark-brown-rgb), 0.08) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+.hero .container {
+    position: relative;
+    z-index: 1;
+}
+
+.hero h1 {
+    color: var(--matte-black);
+    line-height: 1.15;
+}
+
+.hero .lead {
+    color: #5a4f45;
+    font-size: 1.2rem;
+    font-family: var(--font-body);
+}
+
+.hero img {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+}
+
+/* =========================
+   Impact Stats
+   ========================= */
+.impact-stats {
+    background-color: var(--white) !important;
+}
+
+.stat-card {
+    padding: 2.2rem 1.5rem;
+    border-radius: var(--radius-lg);
+    background-color: var(--cream);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-card i {
+    color: var(--olive);
+}
+
+.stat-card h3 {
+    color: var(--dark-brown);
+    font-size: 2.5rem;
+}
+
+/* =========================
+   Cards (generic + product)
+   ========================= */
+.card {
+    border: none;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    background-color: var(--white);
+}
+
+.card-header {
+    background-color: var(--cream) !important;
+    border-bottom: 1px solid rgba(var(--dark-brown-rgb), 0.08);
+    font-weight: 600;
+}
+
+.product-card {
+    border: none;
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    box-shadow: var(--shadow-sm);
+    background-color: var(--white);
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+}
+
+.product-card img {
+    height: 250px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.product-card:hover img {
+    transform: scale(1.06);
+}
+
+.product-card .card-body {
+    padding: 1.4rem;
+}
+
+.product-card .badge {
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 0.4rem 0.85rem;
+    border-radius: 20px;
+}
+
+.product-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+}
+
+.product-badge .badge {
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+}
+
+.card-title {
+    color: var(--matte-black);
+    font-weight: 700;
+    font-family: var(--font-display);
+}
+
+/* =========================
+   How It Works
+   ========================= */
+.step-circle {
+    width: 82px;
+    height: 82px;
+    background: linear-gradient(135deg, var(--dark-brown), var(--olive));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    margin: 0 auto;
+    box-shadow: 0 10px 24px rgba(var(--dark-brown-rgb), 0.28);
+}
+
+/* =========================
+   Footer
+   ========================= */
+.footer {
+    background-color: var(--matte-black) !important;
+    padding-top: 3.75rem !important;
+}
+
+.footer h5, .footer h6 {
+    color: #fff;
+    font-family: var(--font-display);
+}
+
+.footer p, .footer li, .footer span {
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.footer a {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.footer a:hover {
+    color: var(--olive) !important;
+    transition: color 0.3s ease;
+}
+
+.footer .social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff !important;
+    transition: all 0.25s ease;
+}
+
+.footer .social-links a:hover {
+    background: var(--olive);
+    transform: translateY(-3px);
+}
+
+/* =========================
+   Cart
+   ========================= */
+.cart-item {
+    background-color: var(--white);
+    border-radius: var(--radius);
+    padding: 1.1rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.cart-item:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.cart-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+}
+
+.cart-summary {
+    background-color: var(--white);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 100px;
+    border-top: 4px solid var(--olive);
+}
+
+/* =========================
+   Forms
+   ========================= */
+.form-label {
+    font-weight: 600;
+    color: var(--matte-black);
+    font-size: 0.92rem;
+}
+
+.form-control, .form-select {
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1rem;
+    border: 2px solid #E6E0D6;
+    background-color: var(--white);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--dark-brown);
+    box-shadow: 0 0 0 0.2rem rgba(var(--dark-brown-rgb), 0.15);
+}
+
+.form-check-input:checked {
+    background-color: var(--dark-brown);
+    border-color: var(--dark-brown);
+}
+
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(var(--dark-brown-rgb), 0.15);
+}
+
+.input-group-text {
+    background-color: var(--cream);
+    border: 2px solid #E6E0D6;
+    border-right: none;
+    color: var(--dark-brown);
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+
+.input-group .form-control {
+    border-left: none;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* =========================
+   Alerts (match site palette instead of stock Bootstrap colors)
+   ========================= */
+.alert {
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    font-weight: 500;
+}
+
+.alert-success {
+    background-color: rgba(var(--olive-rgb), 0.12);
+    border-color: rgba(var(--olive-rgb), 0.3);
+    color: #3E5417;
+}
+
+.alert-danger {
+    background-color: rgba(166, 69, 58, 0.1);
+    border-color: rgba(166, 69, 58, 0.28);
+    color: var(--danger-color);
+}
+
+.alert-info {
+    background-color: rgba(91, 107, 124, 0.1);
+    border-color: rgba(91, 107, 124, 0.28);
+    color: #3E4B58;
+}
+
+.alert-warning {
+    background-color: rgba(185, 129, 46, 0.12);
+    border-color: rgba(185, 129, 46, 0.3);
+    color: #7A551F;
+}
+
+/* =========================
+   Auth Pages (Login / Sign Up)
+   ========================= */
+.auth-page {
+    background: linear-gradient(135deg, var(--cream) 0%, var(--light-beige) 100%);
+    padding: 64px 0;
+    min-height: calc(100vh - 300px);
+}
+
+.auth-card {
+    border-radius: var(--radius-lg);
+    background-color: var(--white);
+    border-top: 4px solid var(--dark-brown);
+}
+
+.auth-logo {
+    display: block;
+    max-height: 64px;
+    width: auto;
+    margin: 0 auto 0.5rem;
+    object-fit: contain;
+}
+
+.auth-card .fa-user-plus,
+.auth-card .fa-user-circle {
+    color: var(--olive) !important;
+}
+
+/* =========================
+   Profile Page
+   ========================= */
+.profile-card {
+    background-color: var(--white);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.avatar-circle {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, var(--olive), var(--dark-brown));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    box-shadow: var(--shadow-md);
+}
+
+.avatar-circle i, .avatar-circle span {
+    color: #fff !important;
+}
+
+.stat-box {
+    background-color: var(--cream);
+    border-radius: var(--radius-sm);
+    transition: transform 0.3s ease;
+}
+
+.stat-box:hover {
+    transform: translateY(-5px);
+}
+
+/* =========================
+   Accordion (FAQ)
+   ========================= */
+.accordion-item {
+    border: none;
+    margin-bottom: 0.75rem;
+    border-radius: var(--radius-sm) !important;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.accordion-button {
+    font-weight: 600;
+    color: var(--matte-black);
+    background-color: var(--white);
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: rgba(var(--dark-brown-rgb), 0.08);
+    color: var(--dark-brown);
+    box-shadow: none;
+}
+
+.accordion-button:focus {
+    box-shadow: 0 0 0 0.2rem rgba(var(--dark-brown-rgb), 0.15);
+}
+
+/* =========================
+   Social icon buttons (Contact page "Follow Us")
+   Fixed square size so every icon — including LinkedIn's wider
+   glyph — stays centered inside its own box instead of spilling
+   outside it, and the row never overflows its parent card.
+   ========================= */
+.social-icon-row {
+    row-gap: 0.6rem;
+}
+
+.social-icon-btn {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--dark-brown);
+    color: var(--dark-brown);
+    background-color: transparent;
+    font-size: 1.05rem;
+    line-height: 1;
+    transition: all 0.25s ease;
+}
+
+.social-icon-btn i {
+    display: block;
+}
+
+.social-icon-btn:hover {
+    background-color: var(--dark-brown);
+    border-color: var(--dark-brown);
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(var(--dark-brown-rgb), 0.3);
+}
+
+/* =========================
+   Badges (order status, categories)
+   ========================= */
+.badge {
+    font-weight: 600;
+    border-radius: 20px;
+}
+
+/* =========================
+   Animations
+   ========================= */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+    }
+}
+
+/* =========================
+   Responsive
+   ========================= */
+@media (max-width: 992px) {
+    .cart-summary {
+        position: static;
+        margin-top: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        padding: 75px 0;
+        text-align: center;
+    }
+
+    .hero h1 {
+        font-size: 2.1rem;
+    }
+
+    .hero .d-flex.gap-3 {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .cart-item img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .auth-page {
+        padding: 30px 0;
+    }
+
+    .step-circle {
+        width: 70px;
+        height: 70px;
+        font-size: 1.6rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .profile-card, .cart-summary {
+        padding: 1.4rem;
+    }
+}
